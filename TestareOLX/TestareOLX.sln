@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestareOLX", "TestareOLX\TestareOLX.csproj", "{FEC6C834-EFFE-439D-ADEE-820F4B6BDABB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FEC6C834-EFFE-439D-ADEE-820F4B6BDABB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEC6C834-EFFE-439D-ADEE-820F4B6BDABB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEC6C834-EFFE-439D-ADEE-820F4B6BDABB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEC6C834-EFFE-439D-ADEE-820F4B6BDABB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {94225309-7651-4540-9BE8-F264AA925A6F}
+	EndGlobalSection
+EndGlobal
