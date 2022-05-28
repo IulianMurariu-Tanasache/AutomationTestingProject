@@ -45,7 +45,7 @@
   <ItemGroup>
     <Compile Include="FavoriteTest.cs" />
     <Compile Include="ListingTest.cs" />
-    <Compile Include="LoginPageTest.cs" />
+    <Compile Include="AccountTest.cs" />
     <Compile Include="SearchTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -61,6 +61,9 @@
     </PackageReference>
     <PackageReference Include="Selenium.WebDriver.ChromeDriver">
       <Version>102.0.5005.6102</Version>
+    </PackageReference>
+    <PackageReference Include="xunit.extensibility.execution">
+      <Version>2.4.1</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
