@@ -56,9 +56,11 @@ namespace TestareOLX
             acceseazaListaFavorite.Click();
             Thread.Sleep(1000);
 
-            //Garanteaza ca e o lista
+			//Garanteaza ca e o lista
 
-            driver.FindElement(By.Id("observedViewList")).Click();
+			try { 
+                driver.FindElement(By.Id("observedViewList")).Click();
+            }catch(Exception e) { }
             Thread.Sleep(1000);
 
 
