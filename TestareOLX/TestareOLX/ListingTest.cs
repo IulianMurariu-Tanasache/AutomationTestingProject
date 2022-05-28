@@ -4,10 +4,10 @@ using OpenQA.Selenium.Chrome;
 using System;
 using System.Threading;
 
-namespace AutomationTestsForAdvert
+namespace TestareOLX
 {
     [TestClass]
-    public class TestsAdvert
+    public class ListingTest
     {
         [TestMethod]
         public void TestSeePhoneNumber()
