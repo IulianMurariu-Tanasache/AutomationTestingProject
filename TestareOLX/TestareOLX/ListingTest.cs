@@ -3,100 +3,88 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
 using System.Threading;
+using TestareOLX.PageObjects;
+using TestareOLX.Shared;
 
 namespace TestareOLX
 {
     [TestClass]
     public class ListingTest
     {
+        private IWebDriver _driver;
+        private SharedObjects _shared;
+        private ListingsPage _listPage;
+        private ListingPage _listingPage;
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            _driver = new ChromeDriver();
+
+            _shared = new SharedObjects(_driver);
+            _listPage = new ListingsPage(_driver);
+            _listingPage = new ListingPage(_driver);
+
+            _driver.Manage().Window.Maximize();
+            _driver.Navigate().GoToUrl("https://www.olx.ro/");
+        }
+
         [TestMethod]
         public void TestSeePhoneNumber()
         {
-            var driver = new ChromeDriver(); // open chrome browser
-            driver.Manage().Window.Maximize(); // maximize the window
-            driver.Navigate().GoToUrl("http://www.olx.ro"); // access the SUT(System Under Test) url. In our case http://a.testaddressbook.com/
-
-            var cookieBtn = driver.FindElement(By.Id("onetrust-accept-btn-handler"));
-            cookieBtn.Click();
-
+            _shared.CookieButton.Click();
             Thread.Sleep(2000);
 
-            var telefoaneBtn = driver.FindElement(By.XPath("//a[@data-id='99']"));
-            telefoaneBtn.Click();
-
+            _shared.ElectronicsListingsButton.Click();  
             Thread.Sleep(500);
 
-            var toateAnunturileBtn = driver.FindElement(By.XPath("//div[@class='subcategories-title']//a[@data-id='99']"));
-            toateAnunturileBtn.Click();
-
+            _shared.AllListingsButton.Click();
             Thread.Sleep(2000);
 
-            var firstAd = driver.FindElement(By.XPath("//div[@data-testid='listing-grid']/div[2]/a[@class='css-1bbgabe']"));
-            Assert.IsNotNull(firstAd);
-            firstAd.Click();
-
+            _listPage.FirstItem.Click();
             Thread.Sleep(2000);
 
-            var phoneLabelHidden = driver.FindElement(By.XPath("//h3[@class='css-11hr49z-Text eu5v0x0']"));
-            Assert.AreEqual("xxx xxx xxx", phoneLabelHidden.Text);
+            Assert.AreEqual("xxx xxx xxx", _listingPage.PhoneLabelHidden.Text);
 
-            var showPhoneNumberBtn = driver.FindElement(By.XPath("//button[@data-testid='show-phone']"));
-            showPhoneNumberBtn.Click();
-
+            _listingPage.ShowPhoneNumberButton.Click();
             Thread.Sleep(2000);
 
-            //Assert.ThrowsException<OpenQA.Selenium.NoSuchElementException>(() => driver.FindElement(By.XPath("//button[@data-testid='show-phone']")));
-
-            var phoneNumberLabel = driver.FindElement(By.XPath("//a[@data-testid='contact-phone']"));
-            Assert.IsNotNull(phoneNumberLabel);
-            Assert.IsTrue(phoneNumberLabel.Text.Contains("07"));
-
-            driver.Quit();
+            Assert.IsNotNull(_listingPage.PhoneNumberLabel);
+            Assert.IsTrue(_listingPage.PhoneNumberLabel.Text.Contains("07"));
         }
 
         [TestMethod]
         public void TestCheckLocationIsSame()
         {
-            var driver = new ChromeDriver(); // open chrome browser
-            driver.Manage().Window.Maximize(); // maximize the window
-            driver.Navigate().GoToUrl("http://www.olx.ro"); // access the SUT(System Under Test) url. In our case http://a.testaddressbook.com/
-
-            var cookieBtn = driver.FindElement(By.Id("onetrust-accept-btn-handler"));
-            cookieBtn.Click();
-
+            _shared.CookieButton.Click();
             Thread.Sleep(2000);
 
-            var telefoaneBtn = driver.FindElement(By.XPath("//a[@data-id='99']"));
-            telefoaneBtn.Click();
-
+            _shared.ElectronicsListingsButton.Click();
             Thread.Sleep(500);
 
-            var toateAnunturileBtn = driver.FindElement(By.XPath("//div[@class='subcategories-title']//a[@data-id='99']"));
-            toateAnunturileBtn.Click();
-
+            _shared.AllListingsButton.Click();
             Thread.Sleep(2000);
 
-            var firstAd = driver.FindElement(By.XPath("//div[@data-testid='listing-grid']/div[2]/a[@class='css-1bbgabe']"));
-            Assert.IsNotNull(firstAd);
-            firstAd.Click();
-
+            _listPage.FirstItem.Click();
             Thread.Sleep(2000);
 
-            string[] oras = driver.FindElement(By.XPath("//div[@class='css-1nrl4q4']/div[1]/p[@class='css-7xdcwc-Text eu5v0x0']")).Text.Split(new string[] { "," }, StringSplitOptions.None);
-            string judet = driver.FindElement(By.XPath("//div[@class='css-1nrl4q4']/div[1]/p[@class='css-xl6fe0-Text eu5v0x0']")).Text;
+            string[] oras = _listingPage.CityLabel.Text.Split(new string[] { "," }, StringSplitOptions.None);
+            string judet = _listingPage.CountyLabel.Text;
 
-            var mapBtn = driver.FindElement(By.XPath("//div[@class='qa-static-ad-map-container']"));
-            mapBtn.Click();
-
+            _listingPage.MapButton.Click();  
             Thread.Sleep(2000);
 
-            string locationName = driver.FindElement(By.XPath("//span[@class='css-1k9djcd']")).Text;
+            string locationName = _driver.FindElement(By.XPath("//span[@class='css-1k9djcd']")).Text;
             Assert.IsTrue(locationName.Contains(judet));
             foreach(string s in oras)
                 if(s != "" || s != " ")
                     Assert.IsTrue(locationName.Contains(s));
+        }
 
-            driver.Quit();
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            _driver.Quit();
         }
     }
 }

@@ -3,152 +3,125 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
 using System.Threading;
+using TestareOLX.PageObjects;
+using TestareOLX.Shared;
 
 namespace TestareOLX
 {
     [TestClass]
     public class FavoriteTest
     {
+
+        private IWebDriver _driver;
+        private SharedObjects _shared;
+        private FavoritePage _favoritePage;
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            _driver = new ChromeDriver();
+
+            _shared = new SharedObjects(_driver);
+            _favoritePage = new FavoritePage(_driver);
+
+            _driver.Manage().Window.Maximize();
+            _driver.Navigate().GoToUrl("https://www.olx.ro/");
+        }
+
         [TestMethod]
         public void TestareAdaugareFavorite()
         {
-            var driver = new ChromeDriver();
-
-            driver.Manage().Window.Maximize();
-
-            driver.Navigate().GoToUrl("https://www.olx.ro/");
-
-
             //Accept cookies
-            var cookieButton = driver.FindElement(By.Id("onetrust-accept-btn-handler"));
-            cookieButton.Click();
+            _shared.CookieButton.Click();
 
             //Wait for the page to load
             Thread.Sleep(1000);
 
             //Aici apasam pe inima si dam nu multumesc cand ne cere sa facem cont
-           var offerName = AdaugaLaFavorite(driver);
-
+            var offerName = _favoritePage.AdaugaLaFavorite();
 
             //Prima oara cand dam click, butonul e ascuns, dar incercarea il forteaza sa drea scoll 
             //pana sus si afiseaza bunonul dupa il putem apasa
-            var acceseazaListaFavorite = driver.FindElement(By.Id("observed-ads-link"));
-
             try
             { 
-                acceseazaListaFavorite.Click();
+                _shared.HeartButton.Click();
                 Thread.Sleep(1000);
             }
             catch (Exception e){}
 
-            acceseazaListaFavorite.Click();
-
+            _shared.HeartButton.Click();
 
             //Incarca pagina 
             Thread.Sleep(1000);
 			//Garanteaza ca e o lista
 
-			try { 
-                driver.FindElement(By.Id("observedViewList")).Click();
+			try {
+                _favoritePage.ListButton.Click();
             }catch(Exception e) { }
+
             Thread.Sleep(1000);
 
-
-            var ofertaFavorita = driver.FindElement(By.CssSelector(".offers td:first-child .title-cell span"));
-            string numeOfertaFavorita = ofertaFavorita.Text;
+            string numeOfertaFavorita = _favoritePage.FirstFavoriteItem.Text;
 
             Console.WriteLine("Numele ofertei adaugate din lista de favorite:");
             Console.WriteLine(numeOfertaFavorita);
 
             Assert.IsTrue((numeOfertaFavorita == offerName));
-
-            driver.Close();
         }
 
         [TestMethod]
         public void TestareStergereFavorite()
 		{
-            var driver = new ChromeDriver();
-
-            driver.Manage().Window.Maximize();
-
-            driver.Navigate().GoToUrl("https://www.olx.ro/");
-
-
-            //Accept cookies
-            var cookieButton = driver.FindElement(By.Id("onetrust-accept-btn-handler"));
-            cookieButton.Click();
+            _shared.CookieButton.Click();
 
             //Wait for the page to load
             Thread.Sleep(1000);
 
             //Aici apasam pe inima si dam nu multumesc cand ne cere sa facem cont
-            var offerName = AdaugaLaFavorite(driver);
+            var offerName = _favoritePage.AdaugaLaFavorite();
 
             //Prima oara cand dam click, butonul e ascuns, dar incercarea il forteaza sa drea scoll 
             //pana sus si afiseaza bunonul dupa il putem apasa
-            var acceseazaListaFavorite = driver.FindElement(By.Id("observed-ads-link"));
-
+            //Prima oara cand dam click, butonul e ascuns, dar incercarea il forteaza sa drea scoll 
+            //pana sus si afiseaza bunonul dupa il putem apasa
             try
             {
-                acceseazaListaFavorite.Click();
+                _shared.HeartButton.Click();
                 Thread.Sleep(1000);
             }
             catch (Exception e) { }
 
-            acceseazaListaFavorite.Click();
+            _shared.HeartButton.Click();
 
             //Incarca pagina 
             Thread.Sleep(1000);
             //Garanteaza ca e o lista
-
             try
             {
-                driver.FindElement(By.Id("observedViewList")).Click();
+                _favoritePage.ListButton.Click();
             }
             catch (Exception e) { }
             Thread.Sleep(1000);
-            //
 
-            var stergeDinFavorite = driver.FindElement(By.CssSelector(".removeObservedAd"));
-            stergeDinFavorite.Click();
+            _favoritePage.HeartRemoveButton.Click();
 
             Thread.Sleep(1000);
 
             IWebElement ofertaFavorita = null;
             try 
             { 
-                ofertaFavorita = driver.FindElement(By.CssSelector(".offers td:first-child .title-cell span"));
+                ofertaFavorita = _favoritePage.FirstFavoriteItem;
             }
 			catch(Exception e){}
 
             Assert.IsNull(ofertaFavorita);
-
-            driver.Close();
         }
 
-
-        public string AdaugaLaFavorite(ChromeDriver driver)
-		{
-            var firstOffer = driver.FindElement(By.CssSelector(".gallerywide > :first-child"));
-
-            var offerNameElement = firstOffer.FindElement(By.CssSelector(".gallerywide > :first-child .inner a"));
-            string offerName = offerNameElement.FindElement(By.CssSelector(".gallerywide > :first-child  > .inner strong")).Text;
-
-            Console.WriteLine("Numele ofertei adaugate la favorite:");
-
-            Console.WriteLine(offerName);
-
-            var favoriteButton = firstOffer.FindElement(By.CssSelector(".favtab"));
-            favoriteButton.Click();
-
-            Thread.Sleep(1000);
-
-            //Nu vrem sa ne facem cont
-            var nuMultumesc = driver.FindElement(By.CssSelector("[data-cy=\"search_results_button_close_observed_search_info_message\"]"));
-            nuMultumesc.Click();
-
-            return offerName;
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            _driver.Quit();
         }
+
     }
 }
