@@ -45,7 +45,7 @@ namespace TestareOLX
 
             Thread.Sleep(2000);
 
-            Assert.ThrowsException<OpenQA.Selenium.NoSuchElementException>(() => driver.FindElement(By.XPath("//button[@data-testid='show-phone']")));
+            //Assert.ThrowsException<OpenQA.Selenium.NoSuchElementException>(() => driver.FindElement(By.XPath("//button[@data-testid='show-phone']")));
 
             var phoneNumberLabel = driver.FindElement(By.XPath("//a[@data-testid='contact-phone']"));
             Assert.IsNotNull(phoneNumberLabel);

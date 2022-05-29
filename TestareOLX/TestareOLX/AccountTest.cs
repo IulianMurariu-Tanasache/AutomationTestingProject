@@ -61,6 +61,8 @@ namespace TestareOLX
             Assert.AreEqual("https://www.olx.ro/d/myaccount/", url);
 
             Thread.Sleep(2000);
+
+            _driver.Quit();
         }
 
         [TestMethod]
@@ -75,6 +77,8 @@ namespace TestareOLX
             var TxtEmail = _driver.FindElement(By.Id("userEmail"));
 
             Assert.IsNotNull(TxtEmail);
+
+            _driver.Quit();
 
         }
     }
