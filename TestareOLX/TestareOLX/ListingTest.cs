@@ -82,7 +82,7 @@ namespace TestareOLX
 
             Thread.Sleep(2000);
 
-            string[] oras = driver.FindElement(By.XPath("//div[@class='css-1nrl4q4']/div[1]/p[@class='css-7xdcwc-Text eu5v0x0']")).Text.Split(new string[] { ", " }, StringSplitOptions.None);
+            string[] oras = driver.FindElement(By.XPath("//div[@class='css-1nrl4q4']/div[1]/p[@class='css-7xdcwc-Text eu5v0x0']")).Text.Split(new string[] { "," }, StringSplitOptions.None);
             string judet = driver.FindElement(By.XPath("//div[@class='css-1nrl4q4']/div[1]/p[@class='css-xl6fe0-Text eu5v0x0']")).Text;
 
             var mapBtn = driver.FindElement(By.XPath("//div[@class='qa-static-ad-map-container']"));
@@ -93,7 +93,7 @@ namespace TestareOLX
             string locationName = driver.FindElement(By.XPath("//span[@class='css-1k9djcd']")).Text;
             Assert.IsTrue(locationName.Contains(judet));
             foreach(string s in oras)
-                if(s != "")
+                if(s != "" || s != " ")
                     Assert.IsTrue(locationName.Contains(s));
 
             driver.Quit();

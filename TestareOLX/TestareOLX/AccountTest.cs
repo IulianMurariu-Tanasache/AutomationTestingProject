@@ -58,7 +58,7 @@ namespace TestareOLX
 
             string url = _driver.Url.ToString();
 
-            Assert.AreEqual("https://www.olx.ro/d/myaccount/", url);
+            Assert.IsTrue(url.Contains("myaccount"));
 
             Thread.Sleep(2000);
 
