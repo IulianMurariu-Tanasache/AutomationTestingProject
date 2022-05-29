@@ -2,7 +2,7 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
-using System.Threading;
+using TestareOLX.Helpers;
 using TestareOLX.PageObjects;
 using TestareOLX.Shared;
 
@@ -35,7 +35,7 @@ namespace TestareOLX
             _shared.CookieButton.Click();
 
             //Wait for the page to load
-            Thread.Sleep(1000);
+            WaitHelpers.WaitForElementToBeVisibleCustom(_driver, _favoritePage.FirstOfferBy);
 
             //Aici apasam pe inima si dam nu multumesc cand ne cere sa facem cont
             var offerName = _favoritePage.AdaugaLaFavorite();
@@ -45,21 +45,21 @@ namespace TestareOLX
             try
             { 
                 _shared.HeartButton.Click();
-                Thread.Sleep(1000);
+                WaitHelpers.WaitForElementToBeInvisibleCustom(_driver, _favoritePage.HiddenFavoriteBy);
             }
-            catch (Exception e){}
+            catch {}
 
             _shared.HeartButton.Click();
 
             //Incarca pagina 
-            Thread.Sleep(1000);
+            WaitHelpers.WaitForElementToBeVisibleCustom(_driver, _favoritePage.HeartRemoveButtonBy);
 			//Garanteaza ca e o lista
 
 			try {
                 _favoritePage.ListButton.Click();
-            }catch(Exception e) { }
+            }catch { }
 
-            Thread.Sleep(1000);
+            WaitHelpers.WaitForElementToBeVisibleCustom(_driver, _favoritePage.FirstFavoriteItemBy);
 
             string numeOfertaFavorita = _favoritePage.FirstFavoriteItem.Text;
 
@@ -75,44 +75,43 @@ namespace TestareOLX
             _shared.CookieButton.Click();
 
             //Wait for the page to load
-            Thread.Sleep(1000);
+            WaitHelpers.WaitForElementToBeVisibleCustom(_driver, _favoritePage.FirstOfferBy);
 
             //Aici apasam pe inima si dam nu multumesc cand ne cere sa facem cont
             var offerName = _favoritePage.AdaugaLaFavorite();
 
             //Prima oara cand dam click, butonul e ascuns, dar incercarea il forteaza sa drea scoll 
             //pana sus si afiseaza bunonul dupa il putem apasa
-            //Prima oara cand dam click, butonul e ascuns, dar incercarea il forteaza sa drea scoll 
-            //pana sus si afiseaza bunonul dupa il putem apasa
             try
             {
                 _shared.HeartButton.Click();
-                Thread.Sleep(1000);
+                WaitHelpers.WaitForSeconds(1);
             }
-            catch (Exception e) { }
+            catch { }
 
             _shared.HeartButton.Click();
 
             //Incarca pagina 
-            Thread.Sleep(1000);
+            WaitHelpers.WaitForElementToBeVisibleCustom(_driver, _favoritePage.HeartRemoveButtonBy);
             //Garanteaza ca e o lista
             try
             {
                 _favoritePage.ListButton.Click();
             }
-            catch (Exception e) { }
-            Thread.Sleep(1000);
+            catch { }
+
+            WaitHelpers.WaitForSeconds(1);
 
             _favoritePage.HeartRemoveButton.Click();
 
-            Thread.Sleep(1000);
+            WaitHelpers.WaitForSeconds(1);
 
             IWebElement ofertaFavorita = null;
             try 
             { 
                 ofertaFavorita = _favoritePage.FirstFavoriteItem;
             }
-			catch(Exception e){}
+			catch{}
 
             Assert.IsNull(ofertaFavorita);
         }

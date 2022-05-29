@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FavoriteTest.cs" />
+    <Compile Include="Helpers\WaitHelpers.cs" />
     <Compile Include="ListingTest.cs" />
     <Compile Include="AccountTest.cs" />
     <Compile Include="PageObjects\FavoritePage.cs" />

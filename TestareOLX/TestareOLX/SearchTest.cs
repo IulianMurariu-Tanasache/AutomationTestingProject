@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using System.Threading;
+using TestareOLX.Helpers;
 using TestareOLX.PageObjects;
 using TestareOLX.Shared;
 
@@ -34,12 +34,16 @@ namespace TestareOLX
         public void TestPriceSearch()
         {
             _shared.CookieButton.Click();
-            _shared.SearchButton.Click();   
-            Thread.Sleep(2000);
+            _shared.SearchButton.Click();
+
+            WaitHelpers.WaitForElementToBeVisibleCustom(_driver, _listPage.MinPriceBy);
 
             _listPage.MinPriceInput.SendKeys(minPrice.ToString());
+            WaitHelpers.WaitForSeconds(0.5);
             _listPage.MaxPriceInput.SendKeys(maxPrice.ToString());
-            Thread.Sleep(2000);
+            
+            _listPage.SearchButton2.Click();
+            WaitHelpers.WaitForElementToBeVisibleCustom(_driver, _listPage.SearchButton2By);
 
             foreach(var anunt in _listPage.AdsList)
             {
@@ -62,8 +66,9 @@ namespace TestareOLX
                     pretString = pretString.Replace("\r\nPrețulenegociabil", "");
                     pretString = pretString.Replace("Gratuit", "0");
                     pretString = pretString.Replace("Schimb", "");
+                    pretString = pretString.Replace(",", ".");
 
-                    var pret = int.Parse(pretString);
+                    var pret = double.Parse(pretString);
 
                     Assert.IsTrue(pret >= minPrice && pret <= maxPrice);
                 }
@@ -75,10 +80,10 @@ namespace TestareOLX
         {
             _shared.CookieButton.Click();
             _shared.LocationInput.SendKeys($"{localitate}, {judet}");
-            Thread.Sleep(1000);
+            WaitHelpers.WaitForSeconds(0.5);
 
             _shared.SearchButton.Click();
-            Thread.Sleep(2000);
+            WaitHelpers.WaitForElementToBeVisibleCustom(_driver, _listPage.SearchButton2By);
 
             foreach (var anunt in _listPage.AdsList)
             {

@@ -1,8 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using System;
-using System.Threading;
+using TestareOLX.Helpers;
 using TestareOLX.PageObjects;
 using TestareOLX.Shared;
 using Xunit.Sdk;
@@ -47,7 +46,6 @@ namespace TestareOLX
             _loginPage.LoginButton.Click();
 
             //returning to the home page to see where the website gets us 
-            Thread.Sleep(4000);
 
             _driver.Navigate().GoToUrl("https://www.olx.ro/");
 

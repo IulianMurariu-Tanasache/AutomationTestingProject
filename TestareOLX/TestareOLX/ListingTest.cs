@@ -2,12 +2,14 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
-using System.Threading;
+using TestareOLX.Helpers;
 using TestareOLX.PageObjects;
 using TestareOLX.Shared;
 
 namespace TestareOLX
 {
+
+    // daca nu au numar de telefon, testele pica!!!
     [TestClass]
     public class ListingTest
     {
@@ -33,21 +35,21 @@ namespace TestareOLX
         public void TestSeePhoneNumber()
         {
             _shared.CookieButton.Click();
-            Thread.Sleep(2000);
 
-            _shared.ElectronicsListingsButton.Click();  
-            Thread.Sleep(500);
+            _shared.ElectronicsListingsButton.Click();
+            //WaitHelpers.WaitForElementToBeVisibleCustom(_driver, _shared.ElectronicsListingButtonDivBy);
+            WaitHelpers.WaitForSeconds(0.5);
 
             _shared.AllListingsButton.Click();
-            Thread.Sleep(2000);
+            WaitHelpers.WaitForElementToBeVisibleCustom(_driver, _listPage.FirstItemBy);
 
             _listPage.FirstItem.Click();
-            Thread.Sleep(2000);
+            WaitHelpers.WaitForElementToBeVisibleCustom(_driver, _listingPage.PhoneLabelHiddenBy);
 
             Assert.AreEqual("xxx xxx xxx", _listingPage.PhoneLabelHidden.Text);
 
             _listingPage.ShowPhoneNumberButton.Click();
-            Thread.Sleep(2000);
+            WaitHelpers.WaitForElementToBeVisibleCustom(_driver, _listingPage.PhoneLabelBy);
 
             Assert.IsNotNull(_listingPage.PhoneNumberLabel);
             Assert.IsTrue(_listingPage.PhoneNumberLabel.Text.Contains("07"));
@@ -57,24 +59,26 @@ namespace TestareOLX
         public void TestCheckLocationIsSame()
         {
             _shared.CookieButton.Click();
-            Thread.Sleep(2000);
 
             _shared.ElectronicsListingsButton.Click();
-            Thread.Sleep(500);
+            //WaitHelpers.WaitForElementToBeVisibleCustom(_driver, _shared.ElectronicsListingButtonDivBy);
+            WaitHelpers.WaitForSeconds(0.5);
 
             _shared.AllListingsButton.Click();
-            Thread.Sleep(2000);
+            WaitHelpers.WaitForElementToBeVisibleCustom(_driver, _listPage.FirstItemBy);
 
             _listPage.FirstItem.Click();
-            Thread.Sleep(2000);
+            WaitHelpers.WaitForElementToBeVisibleCustom(_driver, _listingPage.PhoneLabelHiddenBy);
 
             string[] oras = _listingPage.CityLabel.Text.Split(new string[] { "," }, StringSplitOptions.None);
             string judet = _listingPage.CountyLabel.Text;
 
-            _listingPage.MapButton.Click();  
-            Thread.Sleep(2000);
+            _listingPage.MapButton.Click();
 
-            string locationName = _driver.FindElement(By.XPath("//span[@class='css-1k9djcd']")).Text;
+            var locationNameBy = By.XPath("//span[@class='css-1k9djcd']");
+            WaitHelpers.WaitForElementToBeVisibleCustom(_driver, locationNameBy);
+
+            string locationName = _driver.FindElement(locationNameBy).Text;
             Assert.IsTrue(locationName.Contains(judet));
             foreach(string s in oras)
                 if(s != "" || s != " ")

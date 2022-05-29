@@ -1,10 +1,6 @@
 ﻿using OpenQA.Selenium;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+using TestareOLX.Helpers;
 
 namespace TestareOLX.PageObjects
 {
@@ -19,29 +15,36 @@ namespace TestareOLX.PageObjects
 
         public string AdaugaLaFavorite()
         {
-            var firstOffer = driver.FindElement(By.CssSelector(".gallerywide > :first-child"));
-
-            var offerNameElement = firstOffer.FindElement(By.CssSelector(".gallerywide > :first-child .inner a"));
+            var offerNameElement = FirstOffer.FindElement(By.CssSelector(".gallerywide > :first-child .inner a"));
             string offerName = offerNameElement.FindElement(By.CssSelector(".gallerywide > :first-child  > .inner strong")).Text;
 
             Console.WriteLine("Numele ofertei adaugate la favorite:");
 
             Console.WriteLine(offerName);
 
-            var favoriteButton = firstOffer.FindElement(By.CssSelector(".favtab"));
+            WaitHelpers.WaitForSeconds(1);
+
+            var favoriteButton = FirstOffer.FindElement(By.CssSelector(".favtab"));
             favoriteButton.Click();
 
-            Thread.Sleep(1000);
 
             //Nu vrem sa ne facem cont
-            var nuMultumesc = driver.FindElement(By.CssSelector("[data-cy=\"search_results_button_close_observed_search_info_message\"]"));
+            var nuMultumescBy = By.CssSelector("[data-cy=\"search_results_button_close_observed_search_info_message\"]");
+            var nuMultumesc = driver.FindElement(nuMultumescBy);
+            WaitHelpers.WaitForElementToBeVisibleCustom(driver, nuMultumescBy);
             nuMultumesc.Click();
 
             return offerName;
         }
 
-        public IWebElement FirstFavoriteItem => driver.FindElement(By.CssSelector(".offers td:first-child .title-cell span"));
-        public IWebElement HeartRemoveButton => driver.FindElement(By.CssSelector(".removeObservedAd"));
+        public IWebElement FirstFavoriteItem => driver.FindElement(FirstFavoriteItemBy);
+        public IWebElement HeartRemoveButton => driver.FindElement(HeartRemoveButtonBy);
         public IWebElement ListButton => driver.FindElement(By.Id("observedViewList"));
+        public IWebElement FirstOffer => driver.FindElement(FirstOfferBy);
+
+        public By FirstOfferBy => By.CssSelector(".gallerywide > :first-child");
+        public By HeartRemoveButtonBy => By.CssSelector(".removeObservedAd");
+        public By FirstFavoriteItemBy => By.CssSelector(".offers td:first-child .title-cell span");
+        public By HiddenFavoriteBy => By.CssSelector("body.homepage hasHiddenHeader");
     }
 }
